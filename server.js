@@ -43,13 +43,16 @@ app.get("/scrape", function(req, res){
     axios.get("https://www.theonion.com/").then(function(response){
         //load the data into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
-        //grab every title arh1 within a header tag
-        $("header h1").each(function(i, element){
+        //grab every title and h1 within a header tag
+        $("article").each(function(i, element){
             //save an empty result object
             var result = {};
             //add the text and href of every link, and save them as properties of the result object
-            result.title = $(this).children("a").text();
-            result.link = $(this).children("a").attr("href");
+            result.title = $(this).find("header").find("a").text();
+            result.link = $(this).children("header").children("h1").children("a").attr("href");
+            result.summary = $(this).find("div.item__content").find(".excerpt").text();
+            result.img = $(this).find("div.item__content").find("figure").find("picture").find("source").attr("data-srcset");
+
             //create a new Article using the "result" object built from scraping
             db.Article.create(result)
             .then(function(dbArticle){
@@ -63,4 +66,9 @@ app.get("/scrape", function(req, res){
         //if an Article was scraped and saved successfully, display this message
         res.send("Scrape Complete");
     });
+});
+
+//Start the server
+app.listen(PORT, function(){
+    console.log("App running on port " + PORT + "!");
 });
