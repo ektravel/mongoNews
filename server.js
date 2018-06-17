@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 var request = require("request");
+var exphbs = require("express-handlebars");
 
 //Scraping tools
 var axios = require("axios");
@@ -27,6 +28,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 //use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
 
+// Set Handlebars.
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 //Connect to the Mongo DB
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoNews";
 
@@ -43,11 +48,12 @@ app.get("/scrape", function(req, res){
     axios.get("https://www.theonion.com/").then(function(response){
         //load the data into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
-        //grab every title and h1 within a header tag
+
+        //grab every article
         $("article").each(function(i, element){
             //save an empty result object
             var result = {};
-            //add the text and href of every link, and save them as properties of the result object
+        
             result.title = $(this).find("header").find("a").text();
             result.link = $(this).children("header").children("h1").children("a").attr("href");
             result.summary = $(this).find("div.item__content").find(".excerpt").text();
@@ -68,6 +74,56 @@ app.get("/scrape", function(req, res){
     });
 });
 
+//Route for the landing page
+app.get("/", function(req,res){
+    db.Article.find({})
+    .then(function(dbArticle){
+        var article = {article:dbArticle};
+        res.render("index",article);
+        // res.json(dbArticle);
+    })
+    .catch(function(err){
+        console.log(err);
+    });
+});
+
+//Route for grabbing all Articles from the db
+app.get("/articles", function(req, res) {
+    db.Article.find({})
+    .then(function(dbArticle) {
+        res.json(dbArticle);
+    })
+    .catch(function(err){res.json(err);
+    });
+});
+
+//Route for grabbing a specific Article by id
+app.get("/articles/:id", function(req,res){
+    //using the id from the id parameter, prepare a query that finds a match in the db
+    db.Article.findOne({_id: req.params.id})
+    //populate all of the notes associated with the article
+    .populate("note")
+    .then(function(dbArticle){
+        //send the result back to the client
+        res.json(dbArticle);
+    }).catch(function(err) {
+        res.json(err);
+    });
+});
+
+//Route for saving/updating an Article's associated Note
+app.post("/articles/:id", function(req,res){
+    //create a new note and pass the req.body to the entry
+    db.Note.create(req.body)
+    .then(function(dbNote){
+        return db.Article.findOneAndUpdate({_id: req.params.id}, {note:dbNote._id}, {new: true});
+    }).then(function(dbArticle){
+        //sent the updated Article back to the client
+        res.json(dbArticle);
+    }).catch(function(err){
+        res.json(err);
+    });
+});
 //Start the server
 app.listen(PORT, function(){
     console.log("App running on port " + PORT + "!");

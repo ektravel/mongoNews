@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Onion News Scraper</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"  href="style.css">
+</head>
+
+<body>
+
+    {{!-- Navbar --}}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">The Onion News Scraper</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+
+                <a class="nav-item nav-link active" href="/">Home</a>
+                <a class="nav-item nav-link" href="/saved">Saved Articles</a>
+                <button class="btn btn-danger btn-sm" type="button" id="scrapeBtn">Scrape New Articles</button>
+            </div>
+        </div>
+    </nav>
+
+    {{!-- Jumbotron --}}
+    <div class="jumbotron jumbotron-fluid text-center text-white" id = "jumbotronDiv">
+        <div class = "container">
+        <h1 class="display-3">Mongo Scraper</h1>
+        <h3 class="display-5">The Onion Edition</h3> 
+        </div>
+        
+    </div>
+
+
+    {{{ body }}}
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../app.js"></script>
+</body>
+
+</html>

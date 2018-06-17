@@ -1,0 +1,21 @@
+body{
+    font-family: "Arial", "Helvetica", sans-serif;
+}
+header{
+    font-family: 'Droid Serif', serif;
+}
+#scrapeBtn{
+    padding-left: 10px;
+    margin-left: 10px;
+}
+#jumbotronDiv{
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    background-image: url("/images/news.jpeg");
+    background-size: cover;
+    background-position: bottom;
+}
+a:link{
+    color:white;
+    text-decoration: none;
+}

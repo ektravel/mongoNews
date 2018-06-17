@@ -1,13 +1,15 @@
+//Require mongoose
 var mongoose = require("mongoose");
 
-//Save a reference to the Schema constructor
+//Get a reference to the mongoose Schema constructor
 var Schema = mongoose.Schema;
 
 //Using the Schema constructor, create a new UserSchema object
 var ArticleSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     link: {
         type: String,
