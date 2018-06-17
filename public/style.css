@@ -19,3 +19,9 @@ a:link{
     color:white;
     text-decoration: none;
 }
+.card {
+    margin-top: 25px;
+}
+.card-header{
+    font-family: 'Playfair Display', serif;
+}

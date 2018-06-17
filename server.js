@@ -54,7 +54,7 @@ app.get("/scrape", function(req, res){
             //save an empty result object
             var result = {};
         
-            result.title = $(this).find("header").find("a").text();
+            result.title = $(this).find("header").find("h1").text();
             result.link = $(this).children("header").children("h1").children("a").attr("href");
             result.summary = $(this).find("div.item__content").find(".excerpt").text();
             result.img = $(this).find("div.item__content").find("figure").find("picture").find("source").attr("data-srcset");
@@ -87,15 +87,15 @@ app.get("/", function(req,res){
     });
 });
 
-//Route for grabbing all Articles from the db
-app.get("/articles", function(req, res) {
-    db.Article.find({})
-    .then(function(dbArticle) {
-        res.json(dbArticle);
-    })
-    .catch(function(err){res.json(err);
-    });
-});
+// //Route for grabbing all Articles from the db
+// app.get("/articles", function(req, res) {
+//     db.Article.find({})
+//     .then(function(dbArticle) {
+//         res.json(dbArticle);
+//     })
+//     .catch(function(err){res.json(err);
+//     });
+// });
 
 //Route for grabbing a specific Article by id
 app.get("/articles/:id", function(req,res){
