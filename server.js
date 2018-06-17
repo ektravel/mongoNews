@@ -87,17 +87,22 @@ app.get("/", function(req,res){
     });
 });
 
-// //Route for grabbing all Articles from the db
-// app.get("/articles", function(req, res) {
-//     db.Article.find({})
-//     .then(function(dbArticle) {
-//         res.json(dbArticle);
-//     })
-//     .catch(function(err){res.json(err);
-//     });
-// });
+//Route for loading all saved articles
+app.get("/saved",function(req, res){
+    db.Article.find({
+        saved: true
+    })
+    .then(function(dbArticle){
+        var hbsObject = {article:dbArticle};
+        res.render("savedArticles", hbsObject);
+    })
+    .catch(function(err){
+        res.json(err);
+    });
+});
 
-//Route for grabbing a specific Article by id
+
+//Route for grabbing a specific Article and its notes by id
 app.get("/articles/:id", function(req,res){
     //using the id from the id parameter, prepare a query that finds a match in the db
     db.Article.findOne({_id: req.params.id})
@@ -116,14 +121,57 @@ app.post("/articles/:id", function(req,res){
     //create a new note and pass the req.body to the entry
     db.Note.create(req.body)
     .then(function(dbNote){
-        return db.Article.findOneAndUpdate({_id: req.params.id}, {note:dbNote._id}, {new: true});
+        return db.Article.findOneAndUpdate({_id: req.params.id}, {$push: {note: dbNote._id}}, {new: true});
     }).then(function(dbArticle){
-        //sent the updated Article back to the client
+        //send the updated Article back to the client
         res.json(dbArticle);
     }).catch(function(err){
         res.json(err);
     });
 });
+
+//Route for saving an article
+app.post("/savearticle/:id", function(req,res){
+    db.Article.findByIdAndUpdate({_id: req.params.id}, {
+        saved: true
+    }).then(function(dbArticle){
+        res.json(dbArticle);
+    }).catch(function(err){
+        res.json(err);
+    });
+});
+
+//Route to delete a saved article
+app.post("/deletearticle/:id", function(req,res){
+    db.Article.findByIdAndUpdate({_id: req.params.id},{
+        saved: false
+    }).then(function(dbArticle){
+        res.json(dbArticle);
+    }).catch(function(err){
+        res.json(err);
+    });
+});
+
+//Route to delete a note
+app.post("/deletenote/:id", function(req,res){
+    db.Note.findByIdAndRemove({_id: req.params.id})
+    .then(function(dbNote){
+        res.json(dbNote);
+    }).catch(function(err){
+        res.json(err);
+    });
+});
+
+//Route to clear all records
+app.get("/crearall", function(req,res){
+    db.Article.remove({})
+    .then(function(){
+        res.send("All records have been deleted.");
+    }).catch(function(err){
+        res.json(err);
+    });
+});
+
 //Start the server
 app.listen(PORT, function(){
     console.log("App running on port " + PORT + "!");

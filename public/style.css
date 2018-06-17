@@ -19,9 +19,24 @@ a:link{
     color:white;
     text-decoration: none;
 }
+a:hover {
+    color:white;
+    text-decoration: underline;
+}
+a:visited {
+    color:white;
+    text-decoration: none;
+}
 .card {
     margin-top: 25px;
 }
 .card-header{
     font-family: 'Playfair Display', serif;
+}
+#saveArticleBtn{
+    margin-top: 15px;
+}
+#dropDB{
+    margin-top: 7px;
+    margin-bottom: 7px;
 }

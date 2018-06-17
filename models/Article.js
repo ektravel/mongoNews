@@ -23,13 +23,19 @@ var ArticleSchema = new Schema({
         type: String,
         required: true
     },
+    saved: {
+        type: Boolean,
+        default: false
+    },
     //note is an object that stores a Note id
-    note: {
+    note: [
+    {
         type: Schema.Types.ObjectId,
         ref: "Note"
     }
+]
 });
-// Create a model using mongoose's model method
+// Create a model from the above schema using mongoose's model method
 var Article = mongoose.model("Article", ArticleSchema);
 
 //Export the Article model

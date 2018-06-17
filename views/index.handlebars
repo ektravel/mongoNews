@@ -13,7 +13,7 @@
             </div>
             <div class = "col-md-4">
               <img src = {{this.img}} class = "img-thumbnail" alt = "Article Image">
-              <button class="btn btn-success btn-sm" id="saveArticleBtn" data-id={{this.id}}>Save Article</button>
+              <button class="btn btn-outline-dark btn-sm" id="saveArticleBtn" data-id={{this.id}}>Save Article</button>
             </div>
           </div>
         </div>
@@ -22,4 +22,10 @@
     {{/each}}
   </div>
 </div>
+
+    {{#if article}}
+    <footer class = "footer footer-dark bg-dark text-center">
+        <button type = "button" class = "btn btn-sm btn-danger" id = "dropDB">Clear All Records</button>
+    </footer>
+    {{/if}}
 
