@@ -33,20 +33,11 @@ $(document).on("click", "#saveNote", function(){
             }
     }).then(function(data){
         console.log(data);
+        window.location = "/saved";
     });
     //Remove the values entered in the title and body textare for note entry
     $("#bodyinput").val("");
 });
-
-
-// If there's a note in the article
-// if (data.note) {
-//   // Place the title of the note in the title input
-//   $("#titleinput").val(data.note.title);
-//   // Place the body of the note in the body textarea
-//   $("#bodyinput").val(data.note.body);
-// }
-
 
 //Function to fill in the notes modal with notes for an article
 function getNotes(thisId){
@@ -78,11 +69,13 @@ function getNotes(thisId){
 
 function createHtmlForNote(note){
     var noteContainer = $("<div>").addClass("card bg-light mb-2");
+    noteContainer.attr("id", note._id);
     var noteText = $("<div>").addClass("card-body").text(note.body);
 
     // Build our delete button
     var delButton = $("<button>").addClass("btn btn-danger btn-sm py-0 float-right deleteNoteBtn");
     delButton.attr("data-id", note._id);
+    delButton.attr("onclick", "deleteNote('" + note._id + "')");
     delButton.text("Delete");
     // Put it all together and append to the DOM
     noteText.append(delButton);
@@ -90,6 +83,8 @@ function createHtmlForNote(note){
     
     return noteContainer;
 }
+
+
 
 //Show all notes for one article
 // "/articles/:id"
@@ -99,8 +94,15 @@ $(document).on("click", ".showNotesBtn", function(){
 });
 
 //Delete a note
-
-"/deletenote/:id"
+function deleteNote(noteId){
+    //var noteId = deleteButton.attr("data-id");
+    $.ajax({
+        method:"POST",
+        url: "/deletenote/" + noteId,
+    }).then(function(){
+        $("#" + noteId).slideUp();
+    });
+}
 
 //Save an article
 $(document).on("click", "#saveArticleBtn", function(){

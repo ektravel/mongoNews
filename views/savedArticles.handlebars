@@ -15,7 +15,8 @@
           </div>
       </div>
       <div>
-        <input type="text" id="bodyinput"></input>
+        {{!-- <input type="text" id="bodyinput"></input> --}}
+        <textarea class = "form-control" id = "bodyinput" rows = "3"></textarea>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id = "closeNote">Close</button>
@@ -42,7 +43,7 @@
             </div>
             <div class = "col-md-4">
               <img src = {{this.img}} class = "img-thumbnail" alt = "Article Image">
-              <button class="btn btn-outline-dark btn-sm showNotesBtn" data-id={{this.id}}>Notes {{this.notes.length}}</button>
+              <button class="btn btn-outline-dark btn-sm showNotesBtn" data-id={{this.id}}>Notes</button>
               <button class="btn btn-outline-danger btn-sm deleteArticleBtn" data-id={{this.id}}>Delete Article</button>
             </div>
           </div>
