@@ -1,64 +1,106 @@
 //Scrape new articles
 $(document).on("click", "#scrapeBtn", function(){
-    $.get("/scrape", function(data){
-        
-    })
+    $.ajax({
+        method: "GET",
+        url:"/scrape"
+        }).then(function(){
+            window.location = "/";
+    });
 });
 
-//Show all saved articles
-// $.get("/saved", function(data){
-
-// })
-
 //Remove an article from saved
-$(document).on("click","#deleteArticleBtn", function(){
+$(document).on("click",".deleteArticleBtn", function(){
     var thisId = $(this).attr("data-id");
     $.ajax({
         method:"POST",
         url:"/deletearticle/" + thisId
     }).then(function(){
-        $("#" + thisId).slideUp
-    })
-
-})
-
-
-
-//Show all notes for one article
-// "/articles/:id"
-$(document).on("click", "#seeNotesBtn", function(){
-    var thisId = $(this).attr("data-id");
-    getNotes(thisId);
+        $("#" + thisId).slideUp();
+    });
 });
 
-
 //Update/Add a note when saveNote button is clicked
-// "/articles/:id"
 $(document).on("click", "#saveNote", function(){
     //Grab the id associated with the article from the submit button
     var thisId = $(this).attr("data-id");
     //Run a POST request to change the note, using what's entered in the inputs
     $.ajax({
         method:"POST",
-        url:"/articles" + thisId,
+        url:"/articles/" + thisId,
         data:{
-            //Value taken from note title area
-            title: $("#titleinput").val(),
             //Value taken from note text area
             body: $("#bodyinput").val()
             }
     }).then(function(data){
         console.log(data);
-        getNotes(thisId);
     });
-        //Remove the values entered in the title and body textare for note entry
-    $("#titleinput").val("");
+    //Remove the values entered in the title and body textare for note entry
     $("#bodyinput").val("");
 });
 
-//Delete a note
-"/deletenote/:id"
 
+// If there's a note in the article
+// if (data.note) {
+//   // Place the title of the note in the title input
+//   $("#titleinput").val(data.note.title);
+//   // Place the body of the note in the body textarea
+//   $("#bodyinput").val(data.note.body);
+// }
+
+
+//Function to fill in the notes modal with notes for an article
+function getNotes(thisId){
+    $.ajax({
+        method: "GET",
+        url: "/articles/" + thisId
+    }).then(function(data){
+        console.log(data);
+        //Empty the Notes section
+        var notesPlaceholder = $("#displayNotes");
+        notesPlaceholder.empty();
+
+        if(data.notes.length < 1){
+            console.log('No notes found');
+            notesPlaceholder.append("<div>No notes to display</div>")
+        }
+        else{
+            console.log('Notes found: ' + data.notes.length);
+
+            for(var i = 0; i < data.notes.length; i++){
+                var noteHtml = createHtmlForNote(data.notes[i]);
+                notesPlaceholder.append(noteHtml);
+            }
+        }
+        $("#saveNote").attr("data-id", thisId);
+        $("#notesModal").modal();
+    });
+}
+
+function createHtmlForNote(note){
+    var noteContainer = $("<div>").addClass("card bg-light mb-2");
+    var noteText = $("<div>").addClass("card-body").text(note.body);
+
+    // Build our delete button
+    var delButton = $("<button>").addClass("btn btn-danger btn-sm py-0 float-right deleteNoteBtn");
+    delButton.attr("data-id", note._id);
+    delButton.text("Delete");
+    // Put it all together and append to the DOM
+    noteText.append(delButton);
+    noteContainer.append(noteText);
+    
+    return noteContainer;
+}
+
+//Show all notes for one article
+// "/articles/:id"
+$(document).on("click", ".showNotesBtn", function(){
+    var thisId = $(this).attr("data-id");
+    getNotes(thisId);
+});
+
+//Delete a note
+
+"/deletenote/:id"
 
 //Save an article
 $(document).on("click", "#saveArticleBtn", function(){
@@ -81,7 +123,5 @@ $(document).on("click", "#dropDB", function(){
     });
 });
 
-
-//})
 
 

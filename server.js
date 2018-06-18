@@ -107,7 +107,7 @@ app.get("/articles/:id", function(req,res){
     //using the id from the id parameter, prepare a query that finds a match in the db
     db.Article.findOne({_id: req.params.id})
     //populate all of the notes associated with the article
-    .populate("note")
+    .populate("notes")
     .then(function(dbArticle){
         //send the result back to the client
         res.json(dbArticle);
@@ -121,7 +121,8 @@ app.post("/articles/:id", function(req,res){
     //create a new note and pass the req.body to the entry
     db.Note.create(req.body)
     .then(function(dbNote){
-        return db.Article.findOneAndUpdate({_id: req.params.id}, {$push: {note: dbNote._id}}, {new: true});
+        // return db.Article.findOneAndUpdate({_id: req.params.id}, {note: dbNote._id}, {new: true});
+        return db.Article.findOneAndUpdate({_id: req.params.id}, {$push: {notes: dbNote._id}}, {new: true});
     }).then(function(dbArticle){
         //send the updated Article back to the client
         res.json(dbArticle);

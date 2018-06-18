@@ -28,7 +28,7 @@ var ArticleSchema = new Schema({
         default: false
     },
     //note is an object that stores a Note id
-    note: [
+    notes:[ 
     {
         type: Schema.Types.ObjectId,
         ref: "Note"
