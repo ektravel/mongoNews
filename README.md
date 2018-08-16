@@ -3,7 +3,7 @@
 ## Overview
 An app that scrapes news articles from the Onion's website, displays the articles, and lets users save and delete their articles. 
 
-[Check out the App] (http://bit.ly/mongoscraper)
+Check out the App: http://bit.ly/mongoscraper
 
 ## Technologies Used
 
