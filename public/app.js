@@ -87,7 +87,6 @@ function createHtmlForNote(note){
 
 
 //Show all notes for one article
-// "/articles/:id"
 $(document).on("click", ".showNotesBtn", function(){
     var thisId = $(this).attr("data-id");
     getNotes(thisId);
@@ -122,7 +121,10 @@ $(document).on("click", "#dropDB", function(){
         url:"/crearall"
         }).then(function(){
             window.location = "/";
-    });
+    })
+    .catch(function(err){
+        res.json(err);
+    })
 });
 
 

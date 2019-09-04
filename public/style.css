@@ -5,8 +5,9 @@ header{
     font-family: 'Droid Serif', serif;
 }
 #scrapeBtn{
-    padding-left: 10px;
+    /* padding-left: 10px; */
     margin-left: 10px;
+    max-width: min-content;
 }
 #jumbotronDiv{
     font-family: 'Playfair Display', serif;
@@ -14,6 +15,12 @@ header{
     background-image: url("/images/news.jpeg");
     background-size: cover;
     background-position: bottom;
+}
+#bodyinput{
+    margin-left: 5%;
+    margin-right: 5%;
+    max-width: 90%;
+    margin-bottom: 16px;
 }
 a:link{
     color:white;
@@ -40,3 +47,11 @@ a:visited {
     margin-top: 7px;
     margin-bottom: 7px;
 }
+
+@media only screen and (max-width: 990px) {
+    #scrapeBtn{
+        /* padding-left: 10px; */
+        margin-left: 0;
+        max-width: min-content;
+    }
+  }
